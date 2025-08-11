@@ -14,5 +14,30 @@
 <body>
   <div id="root"></div>
   <script type="module" src="./src/index.jsx"></script>
+  
+  <!-- reCAPTCHA Enterprise Script -->
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeS06ErAAAAAFWtzMkvNhqGt0Q14S7B8kdzm0gI" async defer></script>
+  
+  <!-- Development Tools: reCAPTCHA Integration Tester -->
+  <script>
+    // Solo cargar herramientas de prueba en desarrollo
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      // Cargar script de pruebas de reCAPTCHA
+      const script = document.createElement('script');
+      script.src = './test-recaptcha-integration.js';
+      script.async = true;
+      document.head.appendChild(script);
+      
+      // Mostrar información de desarrollo en consola
+      console.log('%c🔒 reCAPTCHA Enterprise - Modo Desarrollo', 'color: #4285f4; font-weight: bold; font-size: 14px;');
+      console.log('%c📋 Herramientas de prueba cargadas automáticamente', 'color: #34a853;');
+      console.log('%c💡 Usa testRecaptcha.runAll() para ejecutar todas las pruebas', 'color: #fbbc04;');
+      console.log('%c🔧 Comandos disponibles:', 'color: #ea4335; font-weight: bold;');
+      console.log('   • testRecaptcha.runAll() - Ejecutar todas las pruebas');
+      console.log('   • testRecaptcha.test("LOGIN") - Probar acción específica');
+      console.log('   • testRecaptcha.getResults() - Ver últimos resultados');
+      console.log('   • testRecaptcha.clearResults() - Limpiar resultados');
+    }
+  </script>
 </body>
 </html>

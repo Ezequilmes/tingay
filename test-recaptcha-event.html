@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de reCAPTCHA Enterprise - Tingay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Prueba de reCAPTCHA Enterprise - Tingay</h1>
+        <p>Esta página permite probar la configuración de reCAPTCHA Enterprise y verificar que el frontend y backend estén correctamente configurados.</p>
+        
+        <div class="test-section info">
+            <h3>📋 Información de Configuración</h3>
+            <p><strong>Proyecto:</strong> soygay-b9bc5</p>
+            <p><strong>Site Key:</strong> <span id="siteKey">Cargando...</span></p>
+            <p><strong>Dominio:</strong> <span id="domain">Cargando...</span></p>
+            <p><strong>Estado de reCAPTCHA:</strong> <span id="recaptchaStatus">Verificando...</span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Pruebas de reCAPTCHA</h3>
+            <button onclick="testRecaptchaLoad()">1. Verificar Carga de reCAPTCHA</button>
+            <button onclick="testRecaptchaExecution()">2. Ejecutar reCAPTCHA (LOGIN)</button>
+            <button onclick="testRecaptchaExecution('REGISTER')">3. Ejecutar reCAPTCHA (REGISTER)</button>
+            <button onclick="testRecaptchaExecution('PROFILE_UPDATE')">4. Ejecutar reCAPTCHA (PROFILE_UPDATE)</button>
+            <button onclick="testApiCall()">5. Probar API de reCAPTCHA Enterprise</button>
+            <button onclick="clearLog()">🗑️ Limpiar Log</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Estado de la Prueba</h3>
+            <div id="testStatus" class="status info">Listo para comenzar las pruebas</div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Log de Eventos</h3>
+            <div id="eventLog" class="log">Esperando eventos...
+</div>
+        </div>
+    </div>
+
+    <!-- reCAPTCHA Enterprise Script -->
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeS06ErAAAAAFWtzMkvNhqGt0Q14S7B8kdzm0gI" async defer></script>
+    
+    <script>
+        const SITE_KEY = '6LeS06ErAAAAAFWtzMkvNhqGt0Q14S7B8kdzm0gI';
+        const API_KEY = 'AIzaSyBnN6fzuuSGxnxdkLhQ5xnUkM58jYWDSlw';
+        const PROJECT_ID = 'soygay-b9bc5';
+        
+        let recaptchaReady = false;
+        
+        // Función para agregar logs
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('eventLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}\n`;
+            log.textContent += logEntry;
+            log.scrollTop = log.scrollHeight;
+            console.log(logEntry);
+        }
+        
+        // Función para actualizar el estado
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('testStatus');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        // Función para limpiar el log
+        function clearLog() {
+            document.getElementById('eventLog').textContent = 'Log limpiado...\n';
+        }
+        
+        // Inicialización cuando se carga la página
+        window.onload = function() {
+            document.getElementById('siteKey').textContent = SITE_KEY;
+            document.getElementById('domain').textContent = window.location.hostname;
+            
+            addLog('Página cargada, inicializando pruebas de reCAPTCHA Enterprise');
+            addLog(`Site Key: ${SITE_KEY}`);
+            addLog(`Dominio: ${window.location.hostname}`);
+            
+            // Verificar si reCAPTCHA se carga correctamente
+            setTimeout(checkRecaptchaReady, 2000);
+        };
+        
+        // Verificar si reCAPTCHA está listo
+        function checkRecaptchaReady() {
+            if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise) {
+                recaptchaReady = true;
+                document.getElementById('recaptchaStatus').textContent = '✅ Cargado correctamente';
+                addLog('reCAPTCHA Enterprise cargado correctamente', 'success');
+                updateStatus('reCAPTCHA Enterprise listo para pruebas', 'success');
+            } else {
+                document.getElementById('recaptchaStatus').textContent = '❌ Error de carga';
+                addLog('Error: reCAPTCHA Enterprise no se pudo cargar', 'error');
+                updateStatus('Error: reCAPTCHA Enterprise no disponible', 'error');
+            }
+        }
+        
+        // Prueba 1: Verificar carga de reCAPTCHA
+        function testRecaptchaLoad() {
+            addLog('=== PRUEBA 1: Verificando carga de reCAPTCHA ===');
+            
+            if (typeof grecaptcha === 'undefined') {
+                addLog('❌ grecaptcha no está definido', 'error');
+                updateStatus('Error: grecaptcha no cargado', 'error');
+                return;
+            }
+            
+            if (!grecaptcha.enterprise) {
+                addLog('❌ grecaptcha.enterprise no está disponible', 'error');
+                updateStatus('Error: reCAPTCHA Enterprise no disponible', 'error');
+                return;
+            }
+            
+            addLog('✅ grecaptcha.enterprise está disponible', 'success');
+            addLog(`✅ Site Key configurado: ${SITE_KEY}`, 'success');
+            updateStatus('reCAPTCHA Enterprise verificado correctamente', 'success');
+        }
+        
+        // Prueba 2-4: Ejecutar reCAPTCHA con diferentes acciones
+        async function testRecaptchaExecution(action = 'LOGIN') {
+            addLog(`=== PRUEBA: Ejecutando reCAPTCHA para acción ${action} ===`);
+            
+            if (!recaptchaReady) {
+                addLog('❌ reCAPTCHA no está listo', 'error');
+                updateStatus('Error: reCAPTCHA no está listo', 'error');
+                return;
+            }
+            
+            try {
+                updateStatus(`Ejecutando reCAPTCHA para ${action}...`, 'info');
+                addLog(`Iniciando ejecución de reCAPTCHA para acción: ${action}`);
+                
+                const token = await grecaptcha.enterprise.execute(SITE_KEY, {
+                    action: action
+                });
+                
+                addLog(`✅ Token reCAPTCHA obtenido: ${token.substring(0, 50)}...`, 'success');
+                addLog(`✅ Longitud del token: ${token.length} caracteres`, 'success');
+                
+                // Actualizar el archivo request.json con el token real
+                const requestData = {
+                    event: {
+                        token: token,
+                        expectedAction: action,
+                        siteKey: SITE_KEY
+                    }
+                };
+                
+                addLog(`📝 Datos de solicitud preparados para API:`);
+                addLog(JSON.stringify(requestData, null, 2));
+                
+                updateStatus(`Token reCAPTCHA generado exitosamente para ${action}`, 'success');
+                
+                // Opcional: Llamar automáticamente a la API
+                if (confirm(`¿Deseas enviar este token a la API de reCAPTCHA Enterprise para verificación?`)) {
+                    await callRecaptchaAPI(token, action);
+                }
+                
+            } catch (error) {
+                addLog(`❌ Error ejecutando reCAPTCHA: ${error.message}`, 'error');
+                updateStatus(`Error ejecutando reCAPTCHA: ${error.message}`, 'error');
+            }
+        }
+        
+        // Prueba 5: Probar API de reCAPTCHA Enterprise
+        async function testApiCall() {
+            addLog('=== PRUEBA 5: Probando API de reCAPTCHA Enterprise ===');
+            
+            // Primero ejecutar reCAPTCHA para obtener un token
+            if (!recaptchaReady) {
+                addLog('❌ reCAPTCHA no está listo', 'error');
+                return;
+            }
+            
+            try {
+                updateStatus('Generando token para API...', 'info');
+                const token = await grecaptcha.enterprise.execute(SITE_KEY, {
+                    action: 'API_TEST'
+                });
+                
+                addLog(`Token generado para API: ${token.substring(0, 30)}...`);
+                
+                await callRecaptchaAPI(token, 'API_TEST');
+                
+            } catch (error) {
+                addLog(`❌ Error en prueba de API: ${error.message}`, 'error');
+                updateStatus(`Error en prueba de API: ${error.message}`, 'error');
+            }
+        }
+        
+        // Función para llamar a la API de reCAPTCHA Enterprise
+        async function callRecaptchaAPI(token, action) {
+            addLog('📡 Enviando solicitud a reCAPTCHA Enterprise API...');
+            
+            const requestData = {
+                event: {
+                    token: token,
+                    expectedAction: action,
+                    siteKey: SITE_KEY
+                }
+            };
+            
+            try {
+                const response = await fetch(`https://recaptchaenterprise.googleapis.com/v1/projects/${PROJECT_ID}/assessments?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    addLog('✅ Respuesta exitosa de la API:', 'success');
+                    addLog(`📊 Puntuación de riesgo: ${result.riskAnalysis?.score || 'N/A'}`, 'success');
+                    addLog(`🔍 Razones: ${result.riskAnalysis?.reasons?.join(', ') || 'Ninguna'}`, 'success');
+                    addLog(`✅ Acción válida: ${result.tokenProperties?.valid ? 'Sí' : 'No'}`, 'success');
+                    addLog(`🎯 Acción esperada: ${result.tokenProperties?.action || 'N/A'}`, 'success');
+                    
+                    updateStatus('API de reCAPTCHA Enterprise funcionando correctamente', 'success');
+                } else {
+                    addLog(`❌ Error de API (${response.status}): ${result.error?.message || 'Error desconocido'}`, 'error');
+                    updateStatus(`Error de API: ${result.error?.message || 'Error desconocido'}`, 'error');
+                }
+                
+            } catch (error) {
+                addLog(`❌ Error de red llamando a la API: ${error.message}`, 'error');
+                updateStatus(`Error de red: ${error.message}`, 'error');
+            }
+        }
+        
+        // Manejar errores de reCAPTCHA
+        window.addEventListener('error', function(e) {
+            if (e.message.includes('recaptcha') || e.filename.includes('recaptcha')) {
+                addLog(`❌ Error de reCAPTCHA: ${e.message}`, 'error');
+                updateStatus('Error de reCAPTCHA detectado', 'error');
+            }
+        });
+        
+        // Detectar cuando reCAPTCHA está completamente cargado
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise) {
+                    addLog('🎉 reCAPTCHA Enterprise completamente inicializado', 'success');
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
