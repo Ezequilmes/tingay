@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tingay - LGBTQ+ Dating App</title>
+  <style>
+    :root {
+      /* Pride flag colors */
+      --pride-red: #e50000;
+      --pride-orange: #ff8d00;
+      --pride-yellow: #ffee00;
+      --pride-green: #028121;
+      --pride-blue: #004cff;
+      --pride-purple: #760088;
+      
+      /* App theme colors */
+      --primary-color: #ff4d8d;
+      --secondary-color: #6c63ff;
+      --dark-bg: #121212;
+      --dark-card: #1e1e1e;
+      --dark-text: #ffffff;
+      --dark-border: #333333;
+      --dark-input: #2a2a2a;
+      
+      /* Spacing */
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      
+      /* Font sizes */
+      --font-sm: 0.875rem;
+      --font-md: 1rem;
+      --font-lg: 1.25rem;
+      --font-xl: 1.5rem;
+      --font-xxl: 2rem;
+      
+      /* Border radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+      min-height: 100vh;
+    }
+    
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: linear-gradient(90deg, var(--pride-red), var(--pride-orange), var(--pride-yellow), var(--pride-green), var(--pride-blue), var(--pride-purple));
+    }
+    
+    .app-title {
+      font-size: var(--font-xl);
+      font-weight: bold;
+      margin: 0;
+    }
+    
+    .language-toggle {
+      background: none;
+      border: 1px solid var(--dark-text);
+      color: var(--dark-text);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: var(--font-sm);
+    }
+    
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      padding: var(--spacing-xl);
+    }
+    
+    .auth-card {
+      background-color: var(--dark-card);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .auth-card h2 {
+      margin-top: 0;
+      margin-bottom: var(--spacing-lg);
+      text-align: center;
+      color: var(--primary-color);
+    }
+    
+    .error-message {
+      background-color: rgba(255, 0, 0, 0.1);
+      color: #ff6b6b;
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--spacing-md);
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      font-size: var(--font-sm);
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: var(--spacing-sm);
+      border: 1px solid var(--dark-border);
+      border-radius: var(--radius-sm);
+      background-color: var(--dark-input);
+      color: var(--dark-text);
+      font-size: var(--font-md);
+      box-sizing: border-box;
+    }
+    
+    .save-button {
+      width: 100%;
+      padding: var(--spacing-md);
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: var(--font-md);
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: var(--spacing-md);
+      transition: opacity 0.2s;
+    }
+    
+    .save-button:hover {
+      opacity: 0.9;
+    }
+    
+    .auth-switch {
+      text-align: center;
+      margin-top: var(--spacing-lg);
+      font-size: var(--font-sm);
+    }
+    
+    .auth-switch button {
+      background: none;
+      border: none;
+      color: var(--secondary-color);
+      cursor: pointer;
+      font-size: var(--font-sm);
+      text-decoration: underline;
+      padding: 0;
+      margin-left: var(--spacing-xs);
+    }
+    
+    @media (max-width: 600px) {
+      .auth-card {
+        padding: var(--spacing-lg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="app-title">Tingay</h1>
+    </header>
+    
+    <main class="auth-container">
+      <div class="auth-card" id="login-form">
+        <h2 id="login-title">Iniciar Sesión</h2>
+        <div class="error-message" id="error-message" style="display: none;"></div>
+        <form id="auth-form">
+          <div class="form-group">
+            <label id="email-label">Correo electrónico</label>
+            <input type="email" id="email" required>
+          </div>
+          <div class="form-group">
+            <label id="password-label">Contraseña</label>
+            <input type="password" id="password" required>
+          </div>
+          <button type="submit" class="save-button" id="submit-button">Iniciar Sesión</button>
+        </form>
+        <p class="auth-switch">
+          <span id="switch-text">¿No tienes una cuenta?</span> 
+          <button id="switch-button">Regístrate ahora</button>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Simple language toggle functionality
+    let currentLanguage = 'es';
+    const translations = {
+      en: {
+        login: 'Login',
+        register: 'Register',
+        email: 'Email',
+        password: 'Password',
+        confirmPassword: 'Confirm Password',
+        username: 'Username',
+        dontHaveAccount: 'Don\'t have an account?',
+        alreadyHaveAccount: 'Already have an account?',
+        registerNow: 'Register now',
+        loginNow: 'Login now',
+        loginError: 'Invalid email or password',
+        registerError: 'Error creating account',
+        passwordMismatch: 'Passwords do not match'
+      },
+      es: {
+        login: 'Iniciar Sesión',
+        register: 'Registrarse',
+        email: 'Correo electrónico',
+        password: 'Contraseña',
+        confirmPassword: 'Confirmar Contraseña',
+        username: 'Nombre de usuario',
+        dontHaveAccount: '¿No tienes una cuenta?',
+        alreadyHaveAccount: '¿Ya tienes una cuenta?',
+        registerNow: 'Regístrate ahora',
+        loginNow: 'Inicia sesión ahora',
+        loginError: 'Correo o contraseña inválidos',
+        registerError: 'Error al crear la cuenta',
+        passwordMismatch: 'Las contraseñas no coinciden'
+      }
+    };
+    
+    let isLoginView = true;
+    
+    // DOM elements
+    const loginTitle = document.getElementById('login-title');
+    const emailLabel = document.getElementById('email-label');
+    const passwordLabel = document.getElementById('password-label');
+    const submitButton = document.getElementById('submit-button');
+    const switchText = document.getElementById('switch-text');
+    const switchButton = document.getElementById('switch-button');
+    const errorMessage = document.getElementById('error-message');
+    const authForm = document.getElementById('auth-form');
+    
+    // Toggle between login and register
+    switchButton.addEventListener('click', () => {
+      isLoginView = !isLoginView;
+      updateTexts();
+    });
+    
+    // Form submission
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Simple validation
+      if (!email || !password) {
+        errorMessage.textContent = translations[currentLanguage][isLoginView ? 'loginError' : 'registerError'];
+        errorMessage.style.display = 'block';
+        return;
+      }
+      
+      // Mock successful login/register
+      errorMessage.style.display = 'none';
+      alert(isLoginView ? 
+        `${translations[currentLanguage].login} exitoso con ${email}` : 
+        `${translations[currentLanguage].register} exitoso con ${email}`);
+    });
+    
+    // Update UI texts based on current language and view
+    function updateTexts() {
+      const t = translations[currentLanguage];
+      
+      loginTitle.textContent = isLoginView ? t.login : t.register;
+      emailLabel.textContent = t.email;
+      passwordLabel.textContent = t.password;
+      submitButton.textContent = isLoginView ? t.login : t.register;
+      switchText.textContent = isLoginView ? t.dontHaveAccount : t.alreadyHaveAccount;
+      switchButton.textContent = isLoginView ? t.registerNow : t.loginNow;
+      
+      // Reset error message when switching views
+      errorMessage.style.display = 'none';
+    }
+    
+    // Initialize texts
+    updateTexts();
+  </script>
+</body>
+</html>

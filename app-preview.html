@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tingay - LGBTQ+ Dating App for the Americas">
+  <title>Tingay - LGBTQ+ Dating App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/App.css">
+  <link rel="icon" href="./src/assets/favicon.svg" type="image/svg+xml">
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+  <div id="root">
+    <!-- Fallback content while React loads -->
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column;">
+      <h1>Tingay - LGBTQ+ Dating App</h1>
+      <p>Cargando la aplicación...</p>
+    </div>
+  </div>
+  
+  <!-- Load the React app with Babel transpilation -->
+  <script type="text/babel" src="./src/App.js"></script>
+  <script type="text/babel">
+    // Initialize the app
+    const rootElement = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+</html>

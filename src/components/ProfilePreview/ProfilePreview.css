@@ -1,0 +1,110 @@
+.profile-preview-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-preview-section h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.profile-preview-card {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.preview-photo-container {
+  flex-shrink: 0;
+}
+
+.preview-main-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #e1e5e9;
+}
+
+.preview-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+}
+
+.preview-placeholder span {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.preview-placeholder p {
+  margin: 0;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.preview-info {
+  flex: 1;
+}
+
+.preview-info h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.preview-info p {
+  margin: 0 0 0.5rem 0;
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.preview-additional-photos {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.preview-additional-photos small {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-preview-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .preview-photo-container {
+    margin-bottom: 1rem;
+  }
+  
+  .preview-main-photo,
+  .preview-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .preview-info h4 {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Firebase Auth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff6b9d;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .error {
+            background: #ff4757;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #2ed573;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .info {
+            background: #3742fa;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Test Firebase Authentication</h1>
+        <p>Esta página te ayudará a diagnosticar problemas con Firebase Auth</p>
+        
+        <div id="status" class="info">Inicializando Firebase...</div>
+        
+        <div class="form-group">
+            <label>Email de prueba:</label>
+            <input type="email" id="email" value="test@tingay.com" placeholder="test@tingay.com">
+        </div>
+        
+        <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" id="password" value="123456" placeholder="123456">
+        </div>
+        
+        <button onclick="testRegister()">🆕 Probar Registro</button>
+        <button onclick="testLogin()">🔑 Probar Login</button>
+        <button onclick="checkConfig()">⚙️ Verificar Config</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnN6fzuuSGxnxdkLhQ5xnUkM58jYWDSlw",
+            authDomain: "soygay-b9bc5.firebaseapp.com",
+            databaseURL: "https://soygay-b9bc5-default-rtdb.firebaseio.com",
+            projectId: "soygay-b9bc5",
+            storageBucket: "soygay-b9bc5.firebasestorage.app",
+            messagingSenderId: "861549470388",
+            appId: "1:861549470388:web:47d409ba77edfd07eaede1"
+        };
+
+        let app, auth, db;
+        
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            document.getElementById('status').innerHTML = '<div class="success">✅ Firebase inicializado correctamente</div>';
+            
+            // Hacer disponibles globalmente
+            window.auth = auth;
+            window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+            window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+            
+        } catch (error) {
+            document.getElementById('status').innerHTML = `<div class="error">❌ Error inicializando Firebase: ${error.message}</div>`;
+            console.error('Firebase init error:', error);
+        }
+
+        // Funciones globales para los botones
+        window.testRegister = async function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!email || !password) {
+                resultDiv.innerHTML = '<div class="error">❌ Por favor ingresa email y contraseña</div>';
+                return;
+            }
+            
+            try {
+                resultDiv.innerHTML = '<div class="info">🔄 Registrando usuario...</div>';
+                
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ <strong>Registro exitoso!</strong><br>
+                        👤 UID: ${user.uid}<br>
+                        📧 Email: ${user.email}<br>
+                        🕐 Creado: ${new Date().toLocaleString()}
+                    </div>
+                `;
+                
+            } catch (error) {
+                let errorMessage = error.message;
+                let errorCode = error.code;
+                
+                // Mensajes más amigables
+                if (errorCode === 'auth/email-already-in-use') {
+                    errorMessage = 'Este email ya está registrado. Intenta con otro email o usa el botón de Login.';
+                } else if (errorCode === 'auth/weak-password') {
+                    errorMessage = 'La contraseña es muy débil. Debe tener al menos 6 caracteres.';
+                } else if (errorCode === 'auth/invalid-email') {
+                    errorMessage = 'El formato del email no es válido.';
+                } else if (errorCode === 'auth/operation-not-allowed') {
+                    errorMessage = '🚨 PROBLEMA ENCONTRADO: La autenticación por email/contraseña NO está habilitada en Firebase Console.';
+                }
+                
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ <strong>Error en registro:</strong><br>
+                        🔍 Código: ${errorCode}<br>
+                        💬 Mensaje: ${errorMessage}
+                    </div>
+                `;
+                console.error('Registration error:', error);
+            }
+        };
+
+        window.testLogin = async function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                resultDiv.innerHTML = '<div class="info">🔄 Iniciando sesión...</div>';
+                
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        ✅ <strong>Login exitoso!</strong><br>
+                        👤 UID: ${user.uid}<br>
+                        📧 Email: ${user.email}
+                    </div>
+                `;
+                
+            } catch (error) {
+                let errorMessage = error.message;
+                let errorCode = error.code;
+                
+                if (errorCode === 'auth/user-not-found') {
+                    errorMessage = 'No existe un usuario con este email. Intenta registrarte primero.';
+                } else if (errorCode === 'auth/wrong-password') {
+                    errorMessage = 'Contraseña incorrecta.';
+                } else if (errorCode === 'auth/invalid-email') {
+                    errorMessage = 'El formato del email no es válido.';
+                }
+                
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        ❌ <strong>Error en login:</strong><br>
+                        🔍 Código: ${errorCode}<br>
+                        💬 Mensaje: ${errorMessage}
+                    </div>
+                `;
+                console.error('Login error:', error);
+            }
+        };
+
+        window.checkConfig = function() {
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = `
+                <div class="info">
+                    <strong>🔧 Configuración actual:</strong><br>
+                    🆔 Project ID: ${firebaseConfig.projectId}<br>
+                    🌐 Auth Domain: ${firebaseConfig.authDomain}<br>
+                    🔑 API Key: ${firebaseConfig.apiKey ? '✅ Configurada' : '❌ Faltante'}<br><br>
+                    
+                    <strong>📋 Pasos para solucionar problemas:</strong><br>
+                    1. Ve a <a href="https://console.firebase.google.com/project/soygay-b9bc5/authentication/providers" target="_blank" style="color: #ff6b9d;">Firebase Console</a><br>
+                    2. En "Authentication" → "Sign-in method"<br>
+                    3. Habilita "Email/Password"<br>
+                    4. Guarda los cambios<br>
+                    5. Vuelve a probar el registro
+                </div>
+            `;
+        };
+    </script>
+</body>
+</html>
