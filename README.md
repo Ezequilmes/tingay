@@ -1,6 +1,171 @@
-# Tingay - LGBTQ+ Dating App
+# Dating App - Firebase Integration
 
-Una aplicación de citas inclusiva para la comunidad LGBTQ+ construida con React y Node.js.
+Una aplicación de citas moderna construida con React y Firebase, desplegada en Firebase Hosting.
+
+## 🚀 Características
+
+- **Autenticación**: Sistema completo de registro y login con Firebase Auth
+- **Perfiles de usuario**: Creación y edición de perfiles con fotos
+- **Sistema de matches**: Algoritmo de emparejamiento basado en preferencias
+- **Chat en tiempo real**: Mensajería instantánea entre usuarios emparejados
+- **Subida de fotos**: Almacenamiento seguro en Firebase Storage
+- **Responsive**: Diseño adaptable para móviles y escritorio
+
+## 🛠️ Tecnologías
+
+### Frontend
+- React 18
+- Vite (build tool)
+- CSS3 con diseño moderno
+- Firebase SDK v10
+
+### Backend & Servicios
+- Firebase Authentication
+- Firebase Firestore (base de datos)
+- Firebase Storage (almacenamiento de archivos)
+- Firebase Hosting (despliegue)
+- Firebase App Check (seguridad)
+
+## 📦 Instalación
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone <repository-url>
+   cd app
+   ```
+
+2. **Instalar dependencias**
+   ```bash
+   npm install
+   ```
+
+3. **Configurar variables de entorno**
+   ```bash
+   cp .env.example .env
+   # Editar .env con tus credenciales de Firebase
+   ```
+
+4. **Ejecutar en desarrollo**
+   ```bash
+   npm run dev
+   ```
+
+## 🔧 Configuración de Firebase
+
+### Requisitos previos
+- Cuenta de Firebase
+- Firebase CLI instalado
+- Proyecto de Firebase creado
+
+### Servicios a habilitar
+1. **Authentication** - Proveedores: Email/Password, Google
+2. **Firestore Database** - Modo producción
+3. **Storage** - Reglas de seguridad configuradas
+4. **Hosting** - Para despliegue
+5. **App Check** - reCAPTCHA Enterprise (opcional)
+
+### Archivos de configuración
+- `firebase.json` - Configuración del proyecto
+- `firestore.rules` - Reglas de seguridad de Firestore
+- `storage.rules` - Reglas de seguridad de Storage
+- `.firebaserc` - Configuración del proyecto activo
+
+## 🚀 Despliegue
+
+### Despliegue automático
+```bash
+# Windows
+.\deploy.bat
+
+# Manual
+npm run build
+firebase deploy --only hosting
+```
+
+### URLs de producción
+- **App**: https://soygay-b9bc5.web.app
+- **Console**: https://console.firebase.google.com/project/soygay-b9bc5
+
+## 📁 Estructura del proyecto
+
+```
+app/
+├── src/
+│   ├── components/          # Componentes React
+│   │   ├── Chat/           # Sistema de chat
+│   │   ├── ProfileSetup/   # Configuración de perfil
+│   │   ├── ProfileGrid/    # Vista de perfiles
+│   │   └── ...
+│   ├── services/           # Servicios de Firebase
+│   ├── hooks/              # Custom hooks
+│   └── firebase.js         # Configuración de Firebase
+├── functions/              # Firebase Functions
+├── dataconnect/           # Firebase Data Connect
+├── config/                # Configuraciones del servidor
+├── routes/                # Rutas del backend
+├── middleware/            # Middlewares de seguridad
+└── dist/                  # Build de producción
+```
+
+## 🔐 Seguridad
+
+### Implementado
+- ✅ Reglas de seguridad de Firestore
+- ✅ Reglas de seguridad de Storage
+- ✅ Middleware de autenticación
+- ✅ Validación de datos
+- ✅ CORS configurado
+- ✅ App Check (temporalmente deshabilitado)
+
+### Pendiente
+- ⏳ Configuración completa de reCAPTCHA Enterprise
+- ⏳ Configuración de dominios autorizados
+- ⏳ Configuración de IAM para Storage
+
+## 📚 Documentación adicional
+
+- [`FIREBASE_DEPLOYMENT_GUIDE.md`](./FIREBASE_DEPLOYMENT_GUIDE.md) - Guía completa de despliegue
+- [`RECAPTCHA_ENTERPRISE_SETUP.md`](./RECAPTCHA_ENTERPRISE_SETUP.md) - Configuración de reCAPTCHA
+- [`FIREBASE_SETUP.md`](./FIREBASE_SETUP.md) - Configuración inicial de Firebase
+- [`CRITICAL_FIXES.md`](./CRITICAL_FIXES.md) - Correcciones implementadas
+
+## 🐛 Solución de problemas
+
+### Errores comunes
+
+1. **Error de reCAPTCHA**: Verificar configuración en Firebase Console
+2. **Error de CORS**: Verificar configuración en `cors.json`
+3. **Error de permisos**: Verificar reglas de Firestore y Storage
+
+### Logs y debugging
+```bash
+# Ver logs de Firebase
+firebase functions:log
+
+# Debug local
+npm run dev
+```
+
+## 🤝 Contribución
+
+1. Fork el proyecto
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+
+## 📞 Contacto
+
+Para soporte o preguntas sobre el proyecto, por favor abre un issue en GitHub.
+
+---
+
+**Estado del proyecto**: ✅ Desplegado y funcional  
+**Última actualización**: Diciembre 2024
 
 ## 🚀 Configuración para Usuarios Reales
 
