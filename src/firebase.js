@@ -28,8 +28,8 @@ const app = initializeApp(firebaseConfig);
 // Initialize App Check with reCAPTCHA Enterprise
 let appCheck;
 
-// Temporarily disable App Check until reCAPTCHA Enterprise is properly configured
-const ENABLE_APP_CHECK = false; // Set to true after configuring reCAPTCHA Enterprise
+// Enable App Check with reCAPTCHA Enterprise
+const ENABLE_APP_CHECK = true; // reCAPTCHA Enterprise is now configured
 
 if (ENABLE_APP_CHECK) {
   try {
