@@ -3,34 +3,34 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Users can read and write their own profile
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId && request.appCheck.token != null;
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
     
     // Users can read other users' profiles for discovery
     match /users/{userId} {
-      allow read: if request.auth != null && request.appCheck.token != null;
+      allow read: if request.auth != null;
     }
     
     // Chat messages
     match /chats/{chatId} {
       allow read, write: if request.auth != null && 
-        request.auth.uid in resource.data.participants && request.appCheck.token != null;
+        request.auth.uid in resource.data.participants;
     }
     
     match /chats/{chatId}/messages/{messageId} {
       allow read, write: if request.auth != null && 
-        request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants && request.appCheck.token != null;
+        request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
     }
     
     // Hearts and matches
     match /hearts/{heartId} {
       allow read, write: if request.auth != null && 
-        (request.auth.uid == resource.data.from || request.auth.uid == resource.data.to) && request.appCheck.token != null;
+        (request.auth.uid == resource.data.from || request.auth.uid == resource.data.to);
     }
     
     match /matches/{matchId} {
       allow read, write: if request.auth != null && 
-        request.auth.uid in resource.data.users && request.appCheck.token != null;
+        request.auth.uid in resource.data.users;
     }
   }
 }
