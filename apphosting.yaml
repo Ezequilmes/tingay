@@ -1,0 +1,76 @@
+# Firebase App Hosting Configuration
+# This file configures how Firebase App Hosting builds and deploys your app
+
+# Runtime configuration
+runTime: nodejs20
+
+# Build configuration
+build:
+  commands:
+    - npm ci
+    - npm run build
+  
+  # Output directory after build
+  outputDir: dist
+
+# Server configuration for full-stack apps
+server:
+  # Start command for the server
+  startCommand: npm start
+  
+  # Port where the server runs
+  port: 3001
+  
+  # Health check endpoint
+  healthCheck:
+    path: /health
+
+# Environment variables (these will be set in Firebase Console)
+env:
+  - name: NODE_ENV
+    value: production
+  - name: MONGODB_URI
+    # Set this in Firebase Console App Hosting settings
+  - name: JWT_SECRET
+    # Set this in Firebase Console App Hosting settings
+  - name: JWT_EXPIRES_IN
+    value: 7d
+  - name: VITE_FIREBASE_API_KEY
+    # Set this in Firebase Console App Hosting settings
+  - name: VITE_FIREBASE_AUTH_DOMAIN
+    # Set this in Firebase Console App Hosting settings
+  - name: VITE_FIREBASE_PROJECT_ID
+    # Set this in Firebase Console App Hosting settings
+  - name: VITE_FIREBASE_STORAGE_BUCKET
+    # Set this in Firebase Console App Hosting settings
+  - name: VITE_FIREBASE_MESSAGING_SENDER_ID
+    # Set this in Firebase Console App Hosting settings
+  - name: VITE_FIREBASE_APP_ID
+    # Set this in Firebase Console App Hosting settings
+  - name: VITE_ENABLE_APP_CHECK
+    value: "false"
+  - name: VITE_RECAPTCHA_SITE_KEY
+    # Set this in Firebase Console App Hosting settings
+
+# Static file serving configuration
+static:
+  - source: dist
+    destination: /
+
+# Routing configuration
+rewrites:
+  - source: /api/**
+    destination: /api/**
+  - source: /**
+    destination: /index.html
+
+# Headers configuration
+headers:
+  - source: /**
+    headers:
+      - key: X-Content-Type-Options
+        value: nosniff
+      - key: X-Frame-Options
+        value: DENY
+      - key: X-XSS-Protection
+        value: 1; mode=block
